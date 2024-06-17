@@ -4,9 +4,11 @@ import (
   "fmt"
   "net/http"
   "time"
+  "net"
 )
 
-func HealthCheck(url string) (string, error) {
+func HealthCheckSite(url string) (string, error) {
+  // Health Check Website/App via HTTP GET
   client := &http.Client{
     Timeout: 30 * time.Second, 
   }
@@ -24,3 +26,20 @@ func HealthCheck(url string) (string, error) {
 
   return fmt.Sprintf("Unhealthy (status code: %d)", resp.StatusCode), nil
 }
+
+func HealthCheckPort(host string, port string) (string, error) {
+  // Health Check Port via TCP
+  addr := fmt.Sprintf("%s:%s", host, port)
+  timeout := 5 * time.Second
+
+  conn, err := net.DialTimeout("tcp", addr, timeout)
+  if err != nil {
+    return "", fmt.Errorf("could not connect to %s:%s %w", host, port, err)
+  }
+
+  defer conn.Close()
+
+  return "Port is reachable", nil
+}
+
+
