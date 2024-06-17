@@ -5,6 +5,8 @@ import (
   "fmt"
   "log"
   "os"
+
+  "github.com/NoCapCbas/health-checker/healthchecker"
 )
 
 func main() {
@@ -17,7 +19,7 @@ func main() {
     os.Exit(1)
   }
 
-  status, err := HealthCheck(*url)
+  status, err := healthchecker.HealthCheck(*url)
   if err != nil {
     log.Fatalf("Error checking health: %v\n", err)
   }
